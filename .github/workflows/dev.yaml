@@ -1,11 +1,22 @@
-name: Manual Hello World Workflow dev
+name: Manual Folder Jobs
 
 on:
   workflow_dispatch:
+    inputs:
+      folderName:
+        description: 'Folder to run job on (folder1, folder2, folder3)'
+        required: true
+        default: 'folder1'
 
 jobs:
-  say_hello:
+  run-folder-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Hello 
-        run: echo "Hello "
+      - uses: actions/checkout@v2
+        with:
+          ref: develop # Specify the branch here if needed
+      - name: Run job for selected folder
+        run: |
+          echo "Running job for ${{ github.event.inputs.folderName }}"
+          # Example command, replace with your actual command
+          # cd ${{ github.event.inputs.folderName }} && ./your-script.sh
