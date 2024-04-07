@@ -1,7 +1,12 @@
 name: Hello World ECR and AWS Batch
 
 on:
-  workflow_dispatch:
+  on:
+  push:
+    branches: [ main ]
+  #pull_request:
+  #  branches: [ main ]
+  #workflow_dispatch:
 
 env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
