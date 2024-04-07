@@ -1,4 +1,4 @@
-name: Hello World ECR and AWS Batch
+name: stage Hello World ECR and AWS Batch
 
 on:
   #push:
