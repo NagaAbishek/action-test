@@ -7,10 +7,10 @@ env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
   AWS_REGION: ap-south-1
   JOB_DEFINITION_NAME: update-job-def
-  JOB_QUEUE: new-update-q
-  JOB_NAME: update
+  JOB_QUEUE: flask 
+  JOB_NAME: flask 
   EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
-  USER_NAME: adduser
+  USER_NAME: root
   IMAGE_TAG: latest
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd folder1
+          cd flask
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
       - name: Push image to Amazon ECR
@@ -43,7 +43,7 @@ jobs:
       - name: Update Job Definition with new image
         id: update-job-definition
         run: |
-          cd folder1
+          cd flask
           aws batch register-job-definition \
           --job-definition-name $JOB_DEFINITION_NAME \
           --type container \
