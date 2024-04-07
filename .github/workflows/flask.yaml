@@ -1,0 +1,67 @@
+name: Hello World ECR and AWS Batch
+
+on:
+  #push:
+  #  branches: [ dev ]
+  #pull_request:
+  #  branches: [ main ]
+  workflow_dispatch:
+
+env:
+  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
+  AWS_REGION: ap-south-1
+  JOB_DEFINITION_NAME: update-job-def
+  JOB_QUEUE: queue 
+  JOB_NAME: flask 
+  EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
+  USER_NAME: root
+  IMAGE_TAG: latest
+
+jobs:
+  build-push-update-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          cd flask
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+      - name: Push image to Amazon ECR
+        run: |
+          docker push $ECR_REPOSITORY:$IMAGE_TAG
+
+      # Register a new revision of the job definition with the updated image
+      - name: Update Job Definition with new image
+        id: update-job-definition
+        run: |
+          cd flask
+          aws batch register-job-definition \
+          --job-definition-name $JOB_DEFINITION_NAME \
+          --type container \
+          --container-properties "file://$(pwd)/container-properties.json" \
+          --platform-capabilities FARGATE
+
+      # Extract the new job definition revision ARN for use in starting a job
+      - name: Extract Job Definition ARN
+        run: echo "JOB_DEFINITION_ARN=$(aws batch describe-job-definitions --job-definition-name $JOB_DEFINITION_NAME --status ACTIVE --query 'jobDefinitions[0].jobDefinitionArn' --output text)" >> $GITHUB_ENV
+
+      # Start a Batch job using the new job definition
+      - name: Start Batch Job
+        run: |
+          aws batch submit-job \
+          --job-name $JOB_NAME \
+          --job-queue $JOB_QUEUE \
+          --job-definition $JOB_DEFINITION_ARN
