@@ -3,7 +3,7 @@ name: Hello World ECR and AWS Batch
 on:
   on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   #pull_request:
   #  branches: [ main ]
   #workflow_dispatch:
