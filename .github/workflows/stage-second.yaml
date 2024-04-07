@@ -1,18 +1,14 @@
-name: Hello World ECR and AWS Batch
+name: stage Hello World ECR and AWS Batch Second job
 
 on:
-  #push:
-  #  branches: [ dev ]
-  #pull_request:
-  #  branches: [ main ]
   workflow_dispatch:
 
 env:
-  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
+  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/second
   AWS_REGION: ap-south-1
-  JOB_DEFINITION_NAME: update-job-def
-  JOB_QUEUE: queue 
-  JOB_NAME: flask 
+  JOB_DEFINITION_NAME: second 
+  JOB_QUEUE: queue
+  JOB_NAME: second
   EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
   USER_NAME: root
   IMAGE_TAG: latest
@@ -36,7 +32,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd flask
+          cd second
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
       - name: Push image to Amazon ECR
@@ -47,7 +43,7 @@ jobs:
       - name: Update Job Definition with new image
         id: update-job-definition
         run: |
-          cd flask
+          cd second
           aws batch register-job-definition \
           --job-definition-name $JOB_DEFINITION_NAME \
           --type container \
@@ -64,4 +60,4 @@ jobs:
           aws batch submit-job \
           --job-name $JOB_NAME \
           --job-queue $JOB_QUEUE \
-          --job-definition $JOB_DEFINITION_ARN
+          --job-definition $JOB_DEFINITION_ARN 
