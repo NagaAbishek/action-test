@@ -11,7 +11,7 @@ env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
   AWS_REGION: ap-south-1
   JOB_DEFINITION_NAME: update-job-def
-  JOB_QUEUE: flask 
+  JOB_QUEUE: queue 
   JOB_NAME: flask 
   EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
   USER_NAME: root
