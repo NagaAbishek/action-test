@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
 
 env:
-  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
+  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/second
   AWS_REGION: ap-south-1
-  JOB_DEFINITION_NAME: update-job-def
-  JOB_QUEUE: new-update-q
-  JOB_NAME: update
+  JOB_DEFINITION_NAME: second 
+  JOB_QUEUE: queue
+  JOB_NAME: second
   EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
-  USER_NAME: adduser
+  USER_NAME: root
   IMAGE_TAG: latest
 
 jobs:
