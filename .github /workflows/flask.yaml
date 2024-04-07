@@ -1,13 +1,17 @@
 name: Hello World ECR and AWS Batch
 
 on:
+  #push:
+  #  branches: [ dev ]
+  #pull_request:
+  #  branches: [ main ]
   workflow_dispatch:
 
 env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/test-batch
   AWS_REGION: ap-south-1
   JOB_DEFINITION_NAME: update-job-def
-  JOB_QUEUE: flask 
+  JOB_QUEUE: queue 
   JOB_NAME: flask 
   EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
   USER_NAME: root
@@ -60,4 +64,4 @@ jobs:
           aws batch submit-job \
           --job-name $JOB_NAME \
           --job-queue $JOB_QUEUE \
-          --job-definition $JOB_DEFINITION_ARN 
+          --job-definition $JOB_DEFINITION_ARN
