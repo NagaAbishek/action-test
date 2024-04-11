@@ -12,6 +12,14 @@ on:
           - coop-migros
           - migros-coop
           - migros-main
+      targetBranch:
+        description: 'Select the target branch'
+        required: true
+        type: choice
+        options:
+          - main
+          - dev
+          - stage
 
 env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/second
