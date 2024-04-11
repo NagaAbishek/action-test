@@ -1,4 +1,4 @@
-name: Hello World ECR and AWS Batch Second job
+name: test job
 
 on:
   workflow_dispatch:
