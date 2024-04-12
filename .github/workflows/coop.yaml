@@ -2,6 +2,16 @@ name: Coop Jobs
 
 on:
   workflow_dispatch:
+    inputs:
+      jobSelection:
+        description: 'Select a job to run'
+        required: true
+        type: choice
+        options:
+          - coop-main
+          - coop-migros
+          - migros-coop
+          - migros-main
 
 env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/second
