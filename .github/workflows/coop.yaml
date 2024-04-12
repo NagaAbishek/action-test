@@ -44,5 +44,6 @@ jobs:
         if: ${{ github.event.inputs.jobSelection }}
         run: |
           CONTEXT="${{ github.event.inputs.jobSelection }}"
-          docker build -f ./coop/$CONTEXT/Dockerfile -t $ECR_REPOSITORY/$CONTEXT:$IMAGE_TAG ./coop/$CONTEXT
-          docker push $ECR_REPOSITORY/$CONTEXT:$IMAGE_TAG 
+          IMAGE_URI="${{ env.ECR_REPOSITORY }}/${CONTEXT}:${{ env.IMAGE_TAG }}"
+          docker build -f ./coop/$CONTEXT/Dockerfile -t $IMAGE_URI ./coop/$CONTEXT
+          docker push $IMAGE_URI 
