@@ -40,7 +40,9 @@ jobs:
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker image
+      - name: Build and Push Docker image
+        if: ${{ github.event.inputs.jobSelection }}
         run: |
-          cd second
-          docker build -t $ECR_REPOSITORY:$IMAGE_TAG 
+          CONTEXT="${{ github.event.inputs.jobSelection }}"
+          docker build -f ./coop/$CONTEXT/Dockerfile -t $ECR_REPOSITORY/$CONTEXT:$IMAGE_TAG ./coop/$CONTEXT
+          docker push $ECR_REPOSITORY/$CONTEXT:$IMAGE_TAG  
