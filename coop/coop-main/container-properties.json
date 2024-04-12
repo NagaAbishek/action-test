@@ -1,0 +1,32 @@
+
+{
+  "image": "043437012221.dkr.ecr.ap-south-1.amazonaws.com/second:latest",
+  "command": ["python", "./hello_world.py"],
+  "jobRoleArn": "arn:aws:iam::043437012221:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::043437012221:role/ecsTaskExecutionRole",
+  "environment": [],
+  "mountPoints": [],
+  "volumes": [],
+  "ulimits": [],
+  "resourceRequirements": [
+    {
+      "type": "VCPU",
+      "value": "1"
+    },
+    {
+      "type": "MEMORY",
+      "value": "2048"
+    }
+  ],
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-group": "/aws/batch/job",
+      "awslogs-region": "ap-south-1",
+      "awslogs-stream-prefix": "ecs"
+    }
+  },
+  "networkConfiguration": {
+    "assignPublicIp": "ENABLED"
+  }
+}
