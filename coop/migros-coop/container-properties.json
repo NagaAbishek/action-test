@@ -1,6 +1,5 @@
 {
-  "image": "043437012221.dkr.ecr.ap-south-1.amazonaws.com/second:latest",
-  "command": ["python", "./hello_world.py"],
+  "image": "043437012221.dkr.ecr.ap-south-1.amazonaws.com/migros-coop:latest",
   "jobRoleArn": "arn:aws:iam::043437012221:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::043437012221:role/ecsTaskExecutionRole",
   "environment": [],
@@ -10,11 +9,11 @@
   "resourceRequirements": [
     {
       "type": "VCPU",
-      "value": "1"
+      "value": "0.5"
     },
     {
       "type": "MEMORY",
-      "value": "2048"
+      "value": "1024"
     }
   ],
   "logConfiguration": {
