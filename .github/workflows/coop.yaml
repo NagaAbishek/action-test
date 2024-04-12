@@ -14,7 +14,7 @@ on:
           - migros-main
 
 env:
-  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/second
+  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com/coop-main
   AWS_REGION: ap-south-1
   #JOB_DEFINITION_NAME: second 
   #JOB_QUEUE: queue
