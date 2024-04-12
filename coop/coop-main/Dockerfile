@@ -18,3 +18,4 @@ USER appuser
 
 # Command to run the script
 CMD ["python", "./hello_world.py"]
+
