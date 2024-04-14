@@ -4,16 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       jobSelection:
-        description: "Select a job to run"
-        required: true
-        type: choice
-        options:
-          - coop-main
-          - coop-migros
-          - migros-coop
-          - migros-main
-      jobDefinition:
-        description: "Select a Job Definition Name. This will also set the job name"
+        description: "Select a job to run (this will also set the job name and job definition)"
         required: true
         type: choice
         options:
