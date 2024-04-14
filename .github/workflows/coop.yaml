@@ -25,7 +25,7 @@ on:
 env:
   ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com
   AWS_REGION: ap-south-1
-  JOB_QUEUE: Coop-Queue
+  JOB_QUEUE: queue
   EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
   USER_NAME: root
   IMAGE_TAG: latest
