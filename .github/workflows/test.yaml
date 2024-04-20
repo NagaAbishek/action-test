@@ -1,0 +1,77 @@
+name: test job for workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      jobSelection:
+        description: "Select a job to run"
+        required: true
+        type: choice
+        options:
+          - coop-main
+          - coop-migros
+          - migros-coop
+          - migros-main
+      jobDefinition:
+        description: "Select a Job Definition Name. This will also set the job name"
+        required: true
+        type: choice
+        options:
+          - coop-main
+          - coop-migros
+          - migros-coop
+          - migros-main
+
+env:
+  ECR_REPOSITORY: 043437012221.dkr.ecr.ap-south-1.amazonaws.com
+  AWS_REGION: ap-south-1
+  JOB_QUEUE: Coop-Queue
+  EXECUTION_ROLE_ARN: arn:aws:iam::043437012221:role/ecsTaskExecutionRole
+  USER_NAME: root
+  IMAGE_TAG: latest
+
+jobs:
+  build-push-update-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Docker image
+        run: |
+          CONTEXT="${{ github.event.inputs.jobSelection }}"
+          JOB_DEFINITION_NAME="${{ github.event.inputs.jobDefinition }}"
+          IMAGE_URI="${{ env.ECR_REPOSITORY }}/${CONTEXT}:${{ env.IMAGE_TAG }}"
+          docker build -f ./coop/$CONTEXT/Dockerfile -t $IMAGE_URI ./coop/$CONTEXT
+          docker push $IMAGE_URI
+
+      # Register a new revision of the job definition with the updated image
+      - name: Update Job Definition with new image
+        run: |
+          aws batch register-job-definition \
+            --job-definition-name ${{ github.event.inputs.jobDefinition }} \
+            --type container \
+            --container-properties file://./coop/${{ github.event.inputs.jobSelection }}/container-properties.json \
+            --platform-capabilities FARGATE
+
+      # Extract the new job definition revision ARN for use in starting a job
+      - name: Extract Job Definition ARN
+        run: echo "JOB_DEFINITION_ARN=$(aws batch describe-job-definitions --job-definition-name ${{ github.event.inputs.jobDefinition }} --status ACTIVE --query 'jobDefinitions[0].jobDefinitionArn' --output text)" >> $GITHUB_ENV
+
+      # Start a Batch job using the new job definition
+      - name: Start Batch Job
+        run: |
+          aws batch submit-job \
+            --job-name ${{ github.event.inputs.jobDefinition }} \
+            --job-queue ${{ env.JOB_QUEUE }} \
+            --job-definition $JOB_DEFINITION_ARN
