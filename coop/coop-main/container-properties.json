@@ -1,6 +1,6 @@
 
 {
-  "image": "043437012221.dkr.ecr.us-east-1.amazonaws.com/coop-main:latest",
+  "image": "043437012221.dkr.ecr.ap-south-1.amazonaws.com/coop-main:latest",
   "jobRoleArn": "arn:aws:iam::043437012221:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::043437012221:role/ecsTaskExecutionRole",
   "environment": [],
