@@ -55,14 +55,14 @@ jobs:
             --container-properties file://./coop/${{ github.event.inputs.jobSelection }}/container-properties.json \
             --platform-capabilities FARGATE
 
-      # Extract the new job definition revision ARN for use in starting a job
-      - name: Extract Job Definition ARN
-        run: echo "JOB_DEFINITION_ARN=$(aws batch describe-job-definitions --job-definition-name ${{ github.event.inputs.jobSelection }} --status ACTIVE --query 'jobDefinitions[0].jobDefinitionArn' --output text)" >> $GITHUB_ENV
+      # # Extract the new job definition revision ARN for use in starting a job
+      # - name: Extract Job Definition ARN
+      #   run: echo "JOB_DEFINITION_ARN=$(aws batch describe-job-definitions --job-definition-name ${{ github.event.inputs.jobSelection }} --status ACTIVE --query 'jobDefinitions[0].jobDefinitionArn' --output text)" >> $GITHUB_ENV
 
-      # Start a Batch job using the new job definition
-      - name: Start Batch Job
-        run: |
-          aws batch submit-job \
-            --job-name ${{ github.event.inputs.jobSelection }} \
-            --job-queue ${{ env.JOB_QUEUE }} \
-            --job-definition $JOB_DEFINITION_ARN
+      # # Start a Batch job using the new job definition
+      # - name: Start Batch Job
+      #   run: |
+      #     aws batch submit-job \
+      #       --job-name ${{ github.event.inputs.jobSelection }} \
+      #       --job-queue ${{ env.JOB_QUEUE }} \
+      #       --job-definition $JOB_DEFINITION_ARN
